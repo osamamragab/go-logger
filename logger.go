@@ -45,7 +45,7 @@ func setColor(old, new string) string {
 	return new
 }
 
-// SetColors override defualt ASCII colors
+// SetColors override default ASCII colors
 func SetColors(c *Colors) {
 	colors.Success = setColor(colors.Success, c.Success)
 	colors.Error = setColor(colors.Error, c.Error)
