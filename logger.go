@@ -2,10 +2,11 @@ package logger
 
 import (
 	"fmt"
+	"io"
 	"time"
 )
 
-// Colors represents ASCII colors for console
+// Colors represents ASCII colors
 type Colors struct {
 	Success, Error string
 	Warn, Info     string
@@ -25,16 +26,16 @@ var (
 	}
 )
 
-func format(text, color string) string {
-	now := "[" + time.Now().Format("2006-01-02 15:04:05") + "]"
-	msg := "(" + text + ")"
+func format(title, color, msg string, vars ...interface{}) string {
+	date := "[" + time.Now().Format("2006-01-02 15:04:05") + "]"
+	text := "(" + title + ")"
 
 	if color != colorEmpty {
-		now = colors.Time + now + colorReset
-		msg = color + msg + colorReset
+		date = colors.Time + date + colorReset
+		text = color + text + colorReset
 	}
 
-	return now + " " + msg + ":"
+	return date + " " + text + ": " + fmt.Sprintf(msg, vars...)
 }
 
 func setColor(old, new string) string {
@@ -56,20 +57,40 @@ func SetColors(c *Colors) {
 
 // Success prints formatted success message to standard output
 func Success(msg string, a ...interface{}) {
-	fmt.Println(format("SUCCESS", colors.Success), fmt.Sprintf(msg, a...))
+	fmt.Println(format("SUCCESS", colors.Success, msg, a...))
 }
 
 // Error prints formatted error message to standard output
 func Error(msg string, a ...interface{}) {
-	fmt.Println(format("ERROR", colors.Error), fmt.Sprintf(msg, a...))
+	fmt.Println(format("ERROR", colors.Error, msg, a...))
 }
 
 // Warn prints formatted warning message to standard output
 func Warn(msg string, a ...interface{}) {
-	fmt.Println(format("WARNING", colors.Warn), fmt.Sprintf(msg, a...))
+	fmt.Println(format("WARNING", colors.Warn, msg, a...))
 }
 
 // Info prints formatted info message to standard output
 func Info(msg string, a ...interface{}) {
-	fmt.Println(format("INFO", colors.Info), fmt.Sprintf(msg, a...))
+	fmt.Println(format("INFO", colors.Info, msg, a...))
+}
+
+// Fsuccess prints formatted success message to w
+func Fsuccess(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, format("SUCCESS", colorEmpty, msg, a...))
+}
+
+// Ferror prints formatted error message to w
+func Ferror(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, format("ERROR", colorEmpty, msg, a...))
+}
+
+// Fwarn prints formatted warning message to w
+func Fwarn(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, format("WARNING", colorEmpty, msg, a...))
+}
+
+// Finfo prints formatted info message to w
+func Finfo(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, format("INFO", colorEmpty, msg, a...))
 }
