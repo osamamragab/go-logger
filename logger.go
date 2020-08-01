@@ -37,27 +37,21 @@ func format(text, color string) string {
 	return now + " " + msg + ":"
 }
 
-// SetColors override defualt ASCII colors for conosle
+func setColor(old, new string) string {
+	if new == "" {
+		return old
+	}
+
+	return new
+}
+
+// SetColors override defualt ASCII colors
 func SetColors(c *Colors) {
-	if c.Success != "" {
-		colors.Success = c.Success
-	}
-
-	if c.Error != "" {
-		colors.Error = c.Error
-	}
-
-	if c.Warn != "" {
-		colors.Warn = c.Warn
-	}
-
-	if c.Info != "" {
-		colors.Info = c.Info
-	}
-
-	if c.Time != "" {
-		colors.Time = c.Time
-	}
+	colors.Success = setColor(colors.Success, c.Success)
+	colors.Error = setColor(colors.Error, c.Error)
+	colors.Warn = setColor(colors.Warn, c.Warn)
+	colors.Info = setColor(colors.Info, c.Info)
+	colors.Time = setColor(colors.Time, c.Time)
 }
 
 // Success prints a success message
