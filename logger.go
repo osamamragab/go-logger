@@ -54,22 +54,22 @@ func SetColors(c *Colors) {
 	colors.Time = setColor(colors.Time, c.Time)
 }
 
-// Success prints a success message
+// Success prints formatted success message to standard output
 func Success(msg string, a ...interface{}) {
 	fmt.Println(format("SUCCESS", colors.Success), fmt.Sprintf(msg, a...))
 }
 
-// Error prints a error message
+// Error prints formatted error message to standard output
 func Error(msg string, a ...interface{}) {
 	fmt.Println(format("ERROR", colors.Error), fmt.Sprintf(msg, a...))
 }
 
-// Warn prints a warning message
+// Warn prints formatted warning message to standard output
 func Warn(msg string, a ...interface{}) {
 	fmt.Println(format("WARNING", colors.Warn), fmt.Sprintf(msg, a...))
 }
 
-// Info prints an info message
+// Info prints formatted info message to standard output
 func Info(msg string, a ...interface{}) {
 	fmt.Println(format("INFO", colors.Info), fmt.Sprintf(msg, a...))
 }
