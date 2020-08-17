@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Colors represents ASCII colors
+// Colors describes console ASCII colors
 type Colors struct {
 	Success, Error string
 	Warn, Info     string
@@ -14,7 +14,6 @@ type Colors struct {
 }
 
 var (
-	colorEmpty = ""
 	colorReset = "\x1b[0m"
 
 	colors = Colors{
@@ -22,7 +21,7 @@ var (
 		Error:   "\x1b[31m",
 		Warn:    "\x1b[33m",
 		Info:    "\x1b[34m",
-		Time:    "\x1b[35m",
+		Time:    "\x1b[36m",
 	}
 )
 
@@ -30,7 +29,7 @@ func format(title, color, msg string, vars ...interface{}) string {
 	date := "[" + time.Now().Format("2006-01-02 15:04:05") + "]"
 	text := "(" + title + ")"
 
-	if color != colorEmpty {
+	if color != "" {
 		date = colors.Time + date + colorReset
 		text = color + text + colorReset
 	}
@@ -77,20 +76,20 @@ func Info(msg string, a ...interface{}) {
 
 // Fsuccess prints formatted success message to w
 func Fsuccess(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("SUCCESS", colorEmpty, msg, a...))
+	fmt.Fprintln(w, format("SUCCESS", "", msg, a...))
 }
 
 // Ferror prints formatted error message to w
 func Ferror(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("ERROR", colorEmpty, msg, a...))
+	fmt.Fprintln(w, format("ERROR", "", msg, a...))
 }
 
 // Fwarn prints formatted warning message to w
 func Fwarn(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("WARNING", colorEmpty, msg, a...))
+	fmt.Fprintln(w, format("WARNING", "", msg, a...))
 }
 
 // Finfo prints formatted info message to w
 func Finfo(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("INFO", colorEmpty, msg, a...))
+	fmt.Fprintln(w, format("INFO", "", msg, a...))
 }
