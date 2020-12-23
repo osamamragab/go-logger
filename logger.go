@@ -1,8 +1,10 @@
+// logger is a simple logging helper.
 package logger
 
 import (
 	"fmt"
 	"io"
+	"os"
 	"time"
 )
 
@@ -51,42 +53,42 @@ func SetColors(c *Colors) {
 	colors.Time = setColor(colors.Time, c.Time)
 }
 
-// Success prints formatted success message to standard output.
-func Success(msg string, a ...interface{}) {
-	fmt.Println(format("SUCCESS", colors.Success, msg, a...))
-}
-
-// Error prints formatted error message to standard output.
-func Error(msg string, a ...interface{}) {
-	fmt.Println(format("ERROR", colors.Error, msg, a...))
-}
-
-// Warn prints formatted warning message to standard output.
-func Warn(msg string, a ...interface{}) {
-	fmt.Println(format("WARNING", colors.Warn, msg, a...))
-}
-
-// Info prints formatted info message to standard output.
-func Info(msg string, a ...interface{}) {
-	fmt.Println(format("INFO", colors.Info, msg, a...))
-}
-
 // Fsuccess prints formatted success message to w.
 func Fsuccess(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("SUCCESS", "", msg, a...))
+	fmt.Fprintln(w, format("SUCCESS", colors.Success, msg, a...))
 }
 
 // Ferror prints formatted error message to w.
 func Ferror(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("ERROR", "", msg, a...))
+	fmt.Fprintln(w, format("ERROR", colors.Error, msg, a...))
 }
 
 // Fwarn prints formatted warning message to w.
 func Fwarn(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("WARNING", "", msg, a...))
+	fmt.Fprintln(w, format("WARNING", colors.Warn, msg, a...))
 }
 
 // Finfo prints formatted info message to w.
 func Finfo(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("INFO", "", msg, a...))
+	fmt.Fprintln(w, format("INFO", colors.Info, msg, a...))
+}
+
+// Success prints formatted success message to standard output.
+func Success(msg string, a ...interface{}) {
+	Fsuccess(os.Stdout, msg, a...)
+}
+
+// Error prints formatted error message to standard output.
+func Error(msg string, a ...interface{}) {
+	Ferror(os.Stdout, msg, a...)
+}
+
+// Warn prints formatted warning message to standard output.
+func Warn(msg string, a ...interface{}) {
+	Fwarn(os.Stdout, msg, a...)
+}
+
+// Info prints formatted info message to standard output.
+func Info(msg string, a ...interface{}) {
+	Finfo(os.Stdout, msg, a...)
 }
