@@ -78,9 +78,9 @@ func Success(msg string, a ...interface{}) {
 	Fsuccess(os.Stdout, msg, a...)
 }
 
-// Error prints formatted error message to standard output.
+// Error prints formatted error message to standard error.
 func Error(msg string, a ...interface{}) {
-	Ferror(os.Stdout, msg, a...)
+	Ferror(os.Stderr, msg, a...)
 }
 
 // Warn prints formatted warning message to standard output.
