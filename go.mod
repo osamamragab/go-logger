@@ -1,3 +1,3 @@
-module github.com/osamai/logger
+module github.com/osamai/go-logger
 
 go 1.13
