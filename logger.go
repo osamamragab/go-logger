@@ -7,10 +7,13 @@ import (
 	"os"
 )
 
-// Logger describes logger's colors and formatter function.
+// Logger contains logging settings.
 type Logger struct {
-	Colors        map[string]string
-	Formatter     Formatter
+	// ASCII colors.
+	Colors Colors
+	// formatting function.
+	Formatter Formatter
+
 	OutputSuccess io.Writer
 	OutputError   io.Writer
 	OutputWarn    io.Writer
