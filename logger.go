@@ -9,16 +9,23 @@ import (
 
 // Logger describes logger's colors and formatter function.
 type Logger struct {
-	Colors    map[string]string
-	Formatter Formatter
+	Colors        map[string]string
+	Formatter     Formatter
+	OutputSuccess io.Writer
+	OutputError   io.Writer
+	OutputWarn    io.Writer
+	OutputInfo    io.Writer
 }
 
-// NewLogger creates new Logger instance with DefaultColors and
-// DefaultFormatter.
+// NewLogger creates new Logger instance with defaults set.
 func NewLogger() *Logger {
 	return &Logger{
-		Colors:    DefaultColors,
-		Formatter: DefaultFormatter,
+		Colors:        DefaultColors,
+		Formatter:     DefaultFormatter,
+		OutputSuccess: os.Stdout,
+		OutputError:   os.Stderr,
+		OutputWarn:    os.Stdout,
+		OutputInfo:    os.Stdout,
 	}
 }
 
@@ -49,22 +56,22 @@ func (l *Logger) Finfo(w io.Writer, msg string, a ...interface{}) {
 
 // Success prints formatted success message to standard output.
 func (l *Logger) Success(msg string, a ...interface{}) {
-	l.Fsuccess(os.Stdout, msg, a...)
+	l.Fsuccess(l.OutputSuccess, msg, a...)
 }
 
 // Error prints formatted error message to standard error.
 func (l *Logger) Error(msg string, a ...interface{}) {
-	l.Ferror(os.Stderr, msg, a...)
+	l.Ferror(l.OutputError, msg, a...)
 }
 
 // Warn prints formatted warning message to standard output.
 func (l *Logger) Warn(msg string, a ...interface{}) {
-	l.Fwarn(os.Stdout, msg, a...)
+	l.Fwarn(l.OutputWarn, msg, a...)
 }
 
 // Info prints formatted info message to standard output.
 func (l *Logger) Info(msg string, a ...interface{}) {
-	l.Finfo(os.Stdout, msg, a...)
+	l.Finfo(l.OutputInfo, msg, a...)
 }
 
 var DefaultLogger = NewLogger()
