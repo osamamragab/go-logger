@@ -16,6 +16,6 @@ func (c Colors) Get(key string) string {
 var DefaultColors = Colors{
 	"SUCCESS": "\x1b[32m",
 	"ERROR":   "\x1b[31m",
-	"WARN":    "\x1b[33m",
+	"WARNING": "\x1b[33m",
 	"INFO":    "\x1b[34m",
 }
