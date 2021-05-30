@@ -5,90 +5,106 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 )
 
-// Colors describes console ASCII colors.
-type Colors struct {
-	Success string
-	Error   string
-	Warn    string
-	Info    string
-	Time    string
+// Logger describes logger's colors and formatter function.
+type Logger struct {
+	Colors    map[string]string
+	Formatter Formatter
 }
 
-const colorReset = "\x1b[0m"
-
-var colors = Colors{
-	Success: "\x1b[32m",
-	Error:   "\x1b[31m",
-	Warn:    "\x1b[33m",
-	Info:    "\x1b[34m",
-	Time:    "\x1b[36m",
-}
-
-func format(title, color, msg string, vars ...interface{}) string {
-	date := fmt.Sprintf("[%s]", time.Now().Format("2006-01-02 15:04:05"))
-	text := fmt.Sprintf("(%s)", title)
-	if color != "" {
-		date = colors.Time + date + colorReset
-		text = color + text + colorReset
+// NewLogger creates new Logger instance with DefaultColors and
+// DefaultFormatter.
+func NewLogger() *Logger {
+	return &Logger{
+		Colors:    DefaultColors,
+		Formatter: DefaultFormatter,
 	}
-	return fmt.Sprintf("%s %s: %s", date, text, fmt.Sprintf(msg, vars...))
 }
 
-func setColor(o, n string) string {
-	if n == "" {
-		return o
-	}
-	return n
-}
-
-// SetColors override default ASCII colors.
-func SetColors(c *Colors) {
-	colors.Success = setColor(colors.Success, c.Success)
-	colors.Error = setColor(colors.Error, c.Error)
-	colors.Warn = setColor(colors.Warn, c.Warn)
-	colors.Info = setColor(colors.Info, c.Info)
-	colors.Time = setColor(colors.Time, c.Time)
+// Printf prints formatted log message to standard output.
+func (l *Logger) Printf(format string, a ...interface{}) (int, error) {
+	return fmt.Printf("%s", l.Formatter(nil, "", format, a...))
 }
 
 // Fsuccess prints formatted success message to w.
+func (l *Logger) Fsuccess(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, l.Formatter(l.Colors, "SUCCESS", msg, a...))
+}
+
+// Ferror prints formatted error message to w.
+func (l *Logger) Ferror(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, l.Formatter(l.Colors, "ERROR", msg, a...))
+}
+
+// Fwarn prints formatted warning message to w.
+func (l *Logger) Fwarn(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, l.Formatter(l.Colors, "WARNING", msg, a...))
+}
+
+// Finfo prints formatted info message to w.
+func (l *Logger) Finfo(w io.Writer, msg string, a ...interface{}) {
+	fmt.Fprintln(w, l.Formatter(l.Colors, "INFO", msg, a...))
+}
+
+// Success prints formatted success message to standard output.
+func (l *Logger) Success(msg string, a ...interface{}) {
+	l.Fsuccess(os.Stdout, msg, a...)
+}
+
+// Error prints formatted error message to standard error.
+func (l *Logger) Error(msg string, a ...interface{}) {
+	l.Ferror(os.Stderr, msg, a...)
+}
+
+// Warn prints formatted warning message to standard output.
+func (l *Logger) Warn(msg string, a ...interface{}) {
+	l.Fwarn(os.Stdout, msg, a...)
+}
+
+// Info prints formatted info message to standard output.
+func (l *Logger) Info(msg string, a ...interface{}) {
+	l.Finfo(os.Stdout, msg, a...)
+}
+
+var DefaultLogger = NewLogger()
+
+// Fsuccess prints formatted success message to w.
 func Fsuccess(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("SUCCESS", colors.Success, msg, a...))
+	DefaultLogger.Fsuccess(w, msg, a...)
 }
 
 // Ferror prints formatted error message to w.
 func Ferror(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("ERROR", colors.Error, msg, a...))
+	DefaultLogger.Ferror(w, msg, a...)
 }
 
 // Fwarn prints formatted warning message to w.
 func Fwarn(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("WARNING", colors.Warn, msg, a...))
+	DefaultLogger.Fwarn(w, msg, a...)
 }
 
 // Finfo prints formatted info message to w.
 func Finfo(w io.Writer, msg string, a ...interface{}) {
-	fmt.Fprintln(w, format("INFO", colors.Info, msg, a...))
+	DefaultLogger.Finfo(w, msg, a...)
 }
 
 // Success prints formatted success message to standard output.
 func Success(msg string, a ...interface{}) {
-	Fsuccess(os.Stdout, msg, a...)
+	DefaultLogger.Success(msg, a...)
 }
 
 // Error prints formatted error message to standard error.
 func Error(msg string, a ...interface{}) {
-	Ferror(os.Stderr, msg, a...)
+	DefaultLogger.Error(msg, a...)
 }
 
 // Warn prints formatted warning message to standard output.
 func Warn(msg string, a ...interface{}) {
-	Fwarn(os.Stdout, msg, a...)
+	DefaultLogger.Warn(msg, a...)
 }
 
 // Info prints formatted info message to standard output.
 func Info(msg string, a ...interface{}) {
-	Finfo(os.Stdout, msg, a...)
+	DefaultLogger.Info(msg, a...)
 }
