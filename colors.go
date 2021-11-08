@@ -13,6 +13,7 @@ func (c Colors) Get(key string) string {
 	return c[key]
 }
 
+// DefaultColors contains the default colors used by logger.
 var DefaultColors = Colors{
 	"SUCCESS": "\x1b[32m",
 	"ERROR":   "\x1b[31m",

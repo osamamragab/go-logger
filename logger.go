@@ -1,4 +1,4 @@
-// logger is a simple logging helper.
+// Package logger is a simple logging helper.
 package logger
 
 import (
@@ -62,6 +62,8 @@ func (l *Logger) Finfo(w io.Writer, msg string, a ...interface{}) {
 	fmt.Fprintln(w, l.Formatter(l.Colors, "INFO", msg, a...))
 }
 
+// Fdebug prints formatted debug message to w,
+// if DebugMode is set to true.
 func (l *Logger) Fdebug(w io.Writer, msg string, a ...interface{}) {
 	if l.DebugMode {
 		fmt.Fprintln(w, l.Formatter(l.Colors, "DEBUG", msg, a...))
@@ -94,6 +96,7 @@ func (l *Logger) Debug(msg string, a ...interface{}) {
 	l.Fdebug(l.OutputDebug, msg, a...)
 }
 
+// DefaultLogger is the default logger used by direct functions.
 var DefaultLogger = NewLogger()
 
 // Fsuccess prints formatted success message to w.
