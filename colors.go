@@ -19,4 +19,5 @@ var DefaultColors = Colors{
 	"ERROR":   "\x1b[31m",
 	"WARNING": "\x1b[33m",
 	"INFO":    "\x1b[34m",
+	"DEBUG":   "\x1b[35m",
 }
